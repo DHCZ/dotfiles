@@ -291,9 +291,15 @@ function! AutoSetFileHead()
     normal o
 endfunc
 
+set background=dark
+set t_Co=256
+let g:rehash256 = 1
+"let g:solarized_termcolors=256
+let g:molokai_original = 1
+"colorscheme solarized
 colorscheme molokai
-let g:molokai_original=1
-let g:rehash256=1
+let g:Powerline_colorscheme='solarized256'
+
 if exists('$TMUX')
     set term=screen-256color
 endif
