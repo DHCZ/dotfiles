@@ -4,6 +4,11 @@
 " ** Vundle BEGIN **
 set nocompatible              " be iMproved, required
 filetype off                  " required
+set relativenumber
+set cursorcolumn
+set cursorline
+highlight CursorLine   cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
+highlight CursorColumn cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
