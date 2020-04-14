@@ -1,6 +1,8 @@
 #!/bin/sh
 
 #install need
+sudo apt-get upgrade
+sudo apt-get update
 sudo apt-get install sshfs nfs-common lvm2 dkms openssh-server
 sudo apt-get install build-essential libopencv-dev python-opencv git htop vim python-dev tmux python-pip python-all-dev libatlas-base-dev gfortran openssh-server libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler libboost-all-dev libgflags-dev libgoogle-glog-dev liblmdb-dev graphviz unzip
 sudo pip install numpy jupyter pandas scipy scikit-learn matplotlib graphviz easydict
