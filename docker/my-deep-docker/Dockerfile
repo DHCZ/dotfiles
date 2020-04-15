@@ -31,6 +31,8 @@ RUN conda install -y ipython
 RUN pip install ninja yacs cython matplotlib tqdm opencv-python
 
 
+
+
 # allow ssh access to docker image
 RUN mkdir -p /var/run/sshd && \
     echo 'root:1' | chpasswd
@@ -47,11 +49,6 @@ RUN apt-get update && \
 RUN locale-gen en_US.UTF-8 && \
     locale-gen zh_CN.UTF-8
 
-RUN echo 'export CONDA_DEFAULT_ENV=py36' >> ~/.zshrc && \
-    echo 'export CONDA_PREFIX=/miniconda/envs/$CONDA_DEFAULT_ENV' >> ~/.zshrc && \
-    echo 'export PATH=$CONDA_PREFIX/bin:$PATH' >> ~/.zshrc && \
-    echo 'export CONDA_AUTO_UPDATE_CONDA=false' >> ~/.zshrc
-
 RUN /usr/bin/zsh -c "source ~/.zshrc && \
                      eval zsh"
 
@@ -60,12 +57,13 @@ COPY .tmux.conf /root
 # Repo
 # Install mmdetection
 RUN pip install "git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI"
-RUN conda install cython -y && conda clean --all
 RUN git clone https://github.com/open-mmlab/mmdetection.git /mmdetection
 WORKDIR /mmdetection
 ENV FORCE_CUDA="1"
 RUN pip install --no-cache-dir -e .
 
+# init conda
+CMD ["/opt/conda/condabin/conda", "init" , "zsh"]
 # make docker image run forever
 CMD ["/usr/sbin/sshd", "-D"]
 
