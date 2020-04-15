@@ -7,11 +7,6 @@ FROM pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
 ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0+PTX"
 ENV TORCH_NVCC_FLAGS="-Xfatbin -compress-all"
 ENV CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
-
-RUN apt-get update && apt-get install -y libglib2.0-0 libsm6 libxrender-dev libxext6 \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
-
 # install basics
 RUN apt-get update -y \
  && apt-get install -y apt-utils git curl ca-certificates bzip2 cmake tree htop bmon iotop g++ libgtk2.0-dev
@@ -31,11 +26,10 @@ RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -
     sed -i 's/# DISABLE_AUTO_UPDATE/DISABLE_AUTO_UPDATE/' ~/.zshrc && \
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all
 
+
 RUN conda install -y ipython
 RUN pip install ninja yacs cython matplotlib tqdm opencv-python
 
-
-RUN apt-get update && apt-get install -y openssh-server locales
 
 # allow ssh access to docker image
 RUN mkdir -p /var/run/sshd && \
@@ -53,13 +47,20 @@ RUN apt-get update && \
 RUN locale-gen en_US.UTF-8 && \
     locale-gen zh_CN.UTF-8
 
+RUN echo 'export CONDA_DEFAULT_ENV=py36' >> ~/.zshrc && \
+    echo 'export CONDA_PREFIX=/miniconda/envs/$CONDA_DEFAULT_ENV' >> ~/.zshrc && \
+    echo 'export PATH=$CONDA_PREFIX/bin:$PATH' >> ~/.zshrc && \
+    echo 'export CONDA_AUTO_UPDATE_CONDA=false' >> ~/.zshrc
+
 RUN /usr/bin/zsh -c "source ~/.zshrc && \
                      eval zsh"
 
 COPY .tmux.conf /root
 
+# Repo
 # Install mmdetection
-RUN conda clean --all
+RUN pip install "git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI"
+RUN conda install cython -y && conda clean --all
 RUN git clone https://github.com/open-mmlab/mmdetection.git /mmdetection
 WORKDIR /mmdetection
 ENV FORCE_CUDA="1"
@@ -67,3 +68,4 @@ RUN pip install --no-cache-dir -e .
 
 # make docker image run forever
 CMD ["/usr/sbin/sshd", "-D"]
+
