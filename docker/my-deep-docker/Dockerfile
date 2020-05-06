@@ -28,10 +28,7 @@ RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -
 
 
 RUN conda install -y ipython
-RUN pip install ninja yacs cython matplotlib tqdm opencv-python
-
-
-
+RUN pip install ninja yacs cython matplotlib tqdm opencv-python tensorboardX
 
 # allow ssh access to docker image
 RUN mkdir -p /var/run/sshd && \
@@ -63,7 +60,7 @@ ENV FORCE_CUDA="1"
 RUN pip install --no-cache-dir -e .
 
 # init conda
-CMD ["/opt/conda/condabin/conda", "init" , "zsh"]
+RUN ["/opt/conda/condabin/conda", "init" , "zsh"]
 # make docker image run forever
 CMD ["/usr/sbin/sshd", "-D"]
 
