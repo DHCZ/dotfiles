@@ -59,6 +59,13 @@ WORKDIR /mmdetection
 ENV FORCE_CUDA="1"
 RUN pip install --no-cache-dir -e .
 
+RUN echo "Installing TensorRT." && \
+  wget -qO tensorrt.tar.gz https://www.dropbox.com/s/yu9ixgqx5gx6pon/TensorRT-6.0.1.5.Ubuntu-16.04.x86_64-gnu.cuda-10.1.cudnn7.6.tar.gz?dl=0 && \
+  mkdir /tensorrt && tar -xzvf tensorrt.tar.gz -C /tensorrt --strip-components 1 && rm -rf tensorrt.tar.gz
+WORKDIR /tensorrt
+ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/tensorrt/lib"
+RUN cd python && pip install tensorrt-6.0.1.5-cp36-none-linux_x86_64.whl
+
 # init conda
 RUN ["/opt/conda/condabin/conda", "init" , "zsh"]
 # make docker image run forever
