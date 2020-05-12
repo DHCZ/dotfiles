@@ -28,7 +28,7 @@ RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -
 
 
 RUN conda install -y ipython
-RUN pip install ninja yacs cython matplotlib tqdm opencv-python tensorboardX termcolor
+RUN pip install ninja yacs cython matplotlib tqdm opencv-python tensorboardX termcolor netron
 
 # allow ssh access to docker image
 RUN mkdir -p /var/run/sshd && \
